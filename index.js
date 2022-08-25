@@ -1,8 +1,14 @@
-const Discord = require('discord.js');
-const bot = new Discord.Client();
-const { token } = require('./config.json');
+//setup
+//import discord.js library and use prefix "discord"
+const Discord = require('discord.js')
+
+//import bot token and server file (keepAlive")
+const token = process.env['token']
+const keepAlive = require('./server');
+
+//start a new client instance
+const bot = new Discord.Client()
 const { readdirSync, read } = require('fs');
-const ms = require('ms');
 const { join } = require('path');
 const config = require('./config.json');
 bot.config = config;
@@ -26,6 +32,7 @@ bot.on("message", async (message) => {
     if(message.author.bot) return;
     if(message.channel.type === 'dm') {
         message.channel.send("My commands don't work in DMs, Try inviting me to your server with **this link:** https://discord.com/oauth2/authorize?client_id=799198242683879454&scope=bot&permissions=32775366")
+        console.log(message.author+" tried to run a command in DMs, but failed miserably.")
         return;
     }
     if(message.content === '<@!799198242683879454>') {
@@ -49,6 +56,8 @@ bot.on("message", async (message) => {
         }
     }
 })
+
+//distube
 const distube = require('distube');
 bot.distube = new distube(bot, { searchSongs: false, emitNewSongOnly: true })
 bot.distube
@@ -59,7 +68,8 @@ bot.distube
         `Added ${song.name} - \`${song.formattedDuration}\` to the queue\nRequested by ${song.user}`,
     ))
     .on('error', (message, e) => {
-		//console.error(e)
-		message.channel.send(`An error occurred: ${e}`)
-	})
+		//console.errhannel.send(`An error occurred: ${e}`)
+	  })
+
+keepAlive();
 bot.login(token);
